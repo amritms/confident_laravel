@@ -1,0 +1,52 @@
+It's about confidence
+PHPUnit overview
+HTTP Tests
+Organizing tests
+Laravel Dusk
+Generating tests
+Where to start
+Summary
+Writing the first test
+Setting up application data
+Testing multiple paths
+Dealing with authentication
+Verifying the database
+Handling form validation
+Summary
+Understanding test doubles
+Swapping Facades
+Faking shared Facades
+Mocking your code
+Pushing code to the boundary
+Refactoring through tests
+Using a real integration test
+Summary
+Unit testing validation
+Running a coverage report
+Testing Console Commands
+Testing Events
+Testing Container Bindings
+Testing Models
+Testing Views
+Summary
+Happy Testing
+Writing strong tests
+Making code testable
+Using data providers
+Diving into core
+Using factory states
+Refactoring existing code
+Automating test runs
+Sharing test code
+Choosing database traits
+Practicing TDD (Part 1)
+Practicing TDD (Part 2)
+Mocking Guzzle
+New in Laravel 6
+August 21, 2019
+September 18, 2019
+October 23, 2019
+November 20, 2019
+January 22, 2020
+March 22, 2020
+May 27, 2020
