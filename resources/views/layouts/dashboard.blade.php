@@ -114,7 +114,7 @@
 </div>
 
 
-<script src="/js/jquery-2.1.1.js"></script>
+<script src="/js/jquery-2.1.1.min.js"></script>
 <script src="https://player.vimeo.com/api/player.js"></script>
 <script>
     var iframe = $('#video-player');

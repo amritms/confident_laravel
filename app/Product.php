@@ -8,6 +8,7 @@ class Product extends Model
 {
     const STARTER = 1;
     const FULL = 2;
+    const MASTER = 3;
 
     /**
      * The attributes that are mass assignable.

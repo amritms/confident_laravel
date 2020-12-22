@@ -14,10 +14,8 @@ class VideoControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     */
-    public function show_sets_last_video_and_display_view()
+    /** @test */
+    public function show_sets_last_video_payed_and_display_view()
     {
         $user = factory(User::class)->create();
         $video = factory(Video::class)->create();
@@ -32,14 +30,12 @@ class VideoControllerTest extends TestCase
         $this->assertEquals($video->id, $user->last_viewed_video_id);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function show_returns_403_when_user_does_not_have_access()
     {
         $user = factory(User::class)->create();
         $lesson = factory(Lesson::class)->create([
-            'product_id' => Product::MASTER
+            'product_id' => Product::FULL
         ]);
         $video = factory(Video::class)->create([
             'lesson_id' => $lesson->id
