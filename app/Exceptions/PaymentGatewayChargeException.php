@@ -3,11 +3,17 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class PaymentGatewayChargeException extends Exception
 {
+    /**
+     * @var array
+     */
+    private $data;
+
     public function __construct($message = "", array $data)
     {
         $this->data = $data;
@@ -27,8 +33,7 @@ class PaymentGatewayChargeException extends Exception
     /**
      * Render the exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
      */
     public function render($request)
     {

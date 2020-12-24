@@ -35,7 +35,7 @@ class OrderControllerTest extends TestCase
         $paymentGateway = $this->mock(PaymentGateway::class);
         $paymentGateway->shouldReceive('charge')
             ->with($token, \Mockery::type(Order::class))
-            ->andReturn('...');
+            ->andReturn('charge-id');
 
         $response = $this->post(route('order.store'), [
             'product_id' => $product->id,
