@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Coupon;
+use App\Exceptions\PaymentGatewayChargeException;
 use App\Http\Requests\OrderRequest;
 use App\Lesson;
 use App\Mail\OrderConfirmation;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Session;
 use PDOException;
 use Stripe\Charge;
 use Stripe\Error\Card;
+use Stripe\Exception\CardException;
 use Stripe\Stripe;
 
 class OrderController extends Controller
@@ -34,37 +36,27 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request, PaymentGateway $paymentGateway)
     {
-        try {
-            $product = Product::findOrFail($request->get('product_id'));
+        $product = Product::findOrFail($request->get('product_id'));
 
+        $order = new Order([
+            'product_id' => $product->id,
+            'total' => $product->price,
+        ]);
 
-            $order = new Order([
-                'product_id' => $product->id,
-                'total' => $product->price,
-            ]);
+        $this->applyCoupon($order);
 
-            $this->applyCoupon($order);
+        $charge_id = $paymentGateway->charge($request->get('stripeToken'), $order);
 
-            $charge_id = $paymentGateway->charge($request->get('stripeToken'), $order);
+        $user = User::createFromPurchase($request->get('stripeEmail'), $charge_id);
 
-            $user = User::createFromPurchase($request->get('stripeEmail'), $charge_id);
+        $order->user_id = $user->id;
+        $order->stripe_id = $charge_id;
+        $order->save();
 
-            $order->user_id = $user->id;
-            $order->stripe_id = $charge_id;
-            $order->save();
+        event('order.placed', $order);
 
-            event('order.placed', $order);
-
-            Auth::login($user, true);
-            Mail::to($user->email)->send(new OrderConfirmation($order));
-        } catch (Card $e) {
-            $data = $e->getJsonBody();
-            Log::error('Card failed: ', $data);
-            $template = 'partials.errors.charge_failed';
-            $data = $data['error'];
-
-            return view('errors.generic', compact('template', 'data'));
-        }
+        Auth::login($user, true);
+        Mail::to($user->email)->send(new OrderConfirmation($order));
 
         return redirect('/users/edit');
     }
