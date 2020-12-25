@@ -30,5 +30,5 @@ class PaymentGatewayTest extends TestCase
         // make a call to Stripe API for a test token
     }
 
-    private function
+//    private function
 }

@@ -20,7 +20,7 @@ class WatchesController extends Controller
             'video_id' => $request->get('video_id')
         ]);
 
-         event('video.watched', [-1]);
+         event('video.watched', [1]);
 
         return response(null, 204);
     }

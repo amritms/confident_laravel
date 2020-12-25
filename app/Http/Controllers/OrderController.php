@@ -53,10 +53,10 @@ class OrderController extends Controller
         $order->stripe_id = $charge_id;
         $order->save();
 
-//        event('order.placed', $order);
+        event('order.placed', $order);
 
         Auth::login($user, true);
-//        Mail::to($user->email)->send(new OrderConfirmation($order));
+        Mail::to($user->email)->send(new OrderConfirmation($order));
 
         return redirect('/users/edit');
     }

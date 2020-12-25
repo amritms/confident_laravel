@@ -19,3 +19,4 @@ public/mix-manifest.json
 /storage
 /bootstrap
 .env.dusk.local
+database/database.sqlite
