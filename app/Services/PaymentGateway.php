@@ -11,7 +11,7 @@ class PaymentGateway {
     {
          // TODO: throw exception +  refactor parameter
         Stripe::setApiKey(config('services.stripe.secret'));
-        
+
         $charge = Charge::create([
             "amount" => $order->totalInCents(),
             "currency" => "usd",
