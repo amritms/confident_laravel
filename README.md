@@ -33,6 +33,10 @@ STRIPE_KEY=pk_test_12345678
 STRIPE_SECRET=sk_test_12345678
 ```
 
+```dotenv
+MAILCHIMP_DRIVER=log
+```
+
 **Note:** although it's not require for the test, to properly display the site, you will need to run Laravel mix. To do so run:
 
 ```
