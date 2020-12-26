@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 class PurchasepackageTest extends DuskTestCase
 {
     use WithFaker;
+    use DatabaseMigrations;
 
     /**
      * @test

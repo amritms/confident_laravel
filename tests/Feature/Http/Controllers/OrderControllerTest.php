@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Coupon;
 use App\Exceptions\PaymentGatewayChargeException;
 use App\Mail\OrderConfirmation;
 use App\Order;
@@ -20,6 +21,32 @@ class OrderControllerTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
+    /** @test */
+    public function index_displays_discounted_price_for_coupon()
+    {
+        $coupon = factory(Coupon::class)->create([
+            'percent_off' => 10
+        ]);
+
+        factory(Product::class)->create([
+            'price' => 10
+        ]);
+
+        factory(Product::class)->create([
+            'price' => 20
+        ]);
+
+        $response = $this->withSession(['coupon_id' => $coupon->id])->get('/');
+
+        $response->assertOk();
+        $response->assertViewIs('orders.index');
+        $response->assertViewHasAll(['products', 'lessons', 'videos']);
+
+        //assertSeeText strips out the tag
+        // this test is very brittle
+        $response->assertSee('Buy Now</span> <s class="opacity-75 font-semibold text-sm">$10</s> $9');
+        $response->assertSee('Buy Now</span> <s class="opacity-75 font-semibold text-sm">$20</s> $18');
+    }
     /**
      * @test
      */

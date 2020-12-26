@@ -20,3 +20,4 @@ public/mix-manifest.json
 /bootstrap
 .env.dusk.local
 database/database.sqlite
+database/*.sqlite

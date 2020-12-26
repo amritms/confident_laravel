@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ShiftLinkTest extends DuskTestCase
 {
+    use DatabaseMigrations;
     /**
      * @test
      */

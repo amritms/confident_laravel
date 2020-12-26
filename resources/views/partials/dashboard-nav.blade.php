@@ -5,7 +5,7 @@
             @php
                 $current_lesson = $videos[$lesson->id]->contains('id', $now_playing->id);
             @endphp
-            <details @if($current_lesson)open="open"@endif>
+            <details @if($current_lesson)open="true"@endif>
                 <summary
                         @if($videos[$lesson->id]->pluck('id')->diff($watched)->isEmpty())
                         class="relative border-l-2 border-green-300 outline-none px-4 pl-3 py-3 transition-fast relative block text-gray-300 font-medium"
