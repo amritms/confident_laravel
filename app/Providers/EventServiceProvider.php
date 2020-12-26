@@ -35,7 +35,7 @@ class EventServiceProvider extends ServiceProvider
 
         Event::listen('order.placed', function ($order) {
             \Newsletter::subscribe($order->user->email);
-            \Newsletter::addTags([$order->plan->name], $order->user->email);
+            \Newsletter::addTags([$order->product->name], $order->user->email);
         });
     }
 }

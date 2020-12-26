@@ -42,8 +42,8 @@ class WatchesControllerTest extends TestCase
 
         $response->assertStatus(204);
 
-        $event->assertDispatched('video.watched', function($event, $arguments) use ($video) {
-            $this->assertEquals([$video->id], $arguments, 'The arguments passed to the ['. $event .'] event were unexpected');
+        $event->assertDispatched('video.watched', function($event, $arguments) use ($user, $video) {
+            $this->assertEquals([$user, $video->id], $arguments, 'The arguments passed to the ['. $event .'] event were unexpected');
 
             // return $arguments == [$video->id]
             return true;
