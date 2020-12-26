@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      * @var array
      */
     public $singletons = [
-        PaymentGateway::class
+        PaymentGateway::class => PaymentGateway::class,
     ];
 
     /**
