@@ -4,13 +4,11 @@ on: [push, pull_request]
 
 jobs:
   laravel-tests:
-
     runs-on: ubuntu-latest
 
     steps:
-      - uses: shivammathur/setup-php@b7d1d9c9a92d8d8463ce36d7f60da34d461724f8
-        with:
-          php-version: '7.4'
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
       - uses: actions/checkout@v2
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
@@ -23,10 +21,9 @@ jobs:
       - name: Create Database
         run: |
           mkdir -p database
-          touch database/database.sqlite
+          touch database/testing.sqlite
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
+          DB_DATABASE: database/testing.sqlite
         run: vendor/bin/phpunit
-
