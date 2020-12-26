@@ -3,6 +3,7 @@
 namespace Tests\Browser;
 
 use Illuminate\Foundation\Testing\WithFaker;
+use ProductsTableSeeder;
 use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -11,6 +12,13 @@ class PurchasepackageTest extends DuskTestCase
 {
     use WithFaker;
     use DatabaseMigrations;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed(ProductsTableSeeder::class);
+    }
 
     /**
      * @test
