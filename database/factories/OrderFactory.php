@@ -13,8 +13,8 @@ $factory->define(Order::class, function (Faker $faker) {
         'product_id' => function () {
             return factory(App\Product::class)->state('starter')->create()->id;
         },
-//        'transaction_id' => $faker->word,
-    'stripe_id' => $faker->word,
+        'transaction_id' => $faker->word,
+//    'stripe_id' => $faker->word,
         'coupon_id' => function () {
             return factory(App\Coupon::class)->create()->id;
         },

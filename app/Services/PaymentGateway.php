@@ -10,7 +10,7 @@ use Stripe\Stripe;
 
 class PaymentGateway
 {
-    public function charge(string $token, Order $order)
+    public function charge(string $token, String $email, Order $order)
     {
         try {
             Stripe::setApiKey(config('services.stripe.secret'));
@@ -20,7 +20,7 @@ class PaymentGateway
                 "currency" => "usd",
                 "source" => $token,
                 "description" => "Confident Laravel - " . $order->product->name,
-                "receipt_email" => request()->get('stripeEmail')
+                "receipt_email" => $email
             ]);
 
             return $charge->id;

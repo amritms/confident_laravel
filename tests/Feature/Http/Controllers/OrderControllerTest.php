@@ -52,7 +52,7 @@ class OrderControllerTest extends TestCase
      */
     public function store_charges_for_order_and_creates_account()
     {
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
         $token = $this->faker->md5;
         $email = $this->faker->safeEmail;
         $charge_id = $this->faker->md5;
@@ -68,11 +68,14 @@ class OrderControllerTest extends TestCase
 
         $paymentGateway = $this->mock(PaymentGateway::class);
         $paymentGateway->shouldReceive('charge')
-            ->with($token, \Mockery::on(function ($argument) use ($product) {
+            ->with($token, $email, \Mockery::on(function ($argument) use ($product) {
                 return $argument->product_id == $product->id
-                    && $argument->total == $product->pric;
+                    && $argument->total == $product->price;
             }))
             ->andReturn($charge_id);
+
+        $event = Event::fake();
+        $mail = Mail::fake();
 
         $response = $this->post(route('order.store'), [
             'product_id' => $product->id,
@@ -93,23 +96,21 @@ class OrderControllerTest extends TestCase
             'product_id' => $product->id,
             'total' => $product->price,
             'user_id' => $user->id,
-            'stripe_id' => $charge_id
+            'transaction_id' => $charge_id
         ]);
 
+        $order = Order::where('transaction_id', $charge_id)->first();
+
         // event is fired
-        $event = Event::fake();
-        //$event->assertDispatched('order.placed'); // this also works but this assertion should be tightened
-        $order = Order::where('stripe_id', $charge_id)->first();
+//        $event->assertDispatched('order.placed'); // this also works but this assertion should be tightened
         $event->assertDispatched('order.placed', function($event, $argument) use($order){
             return $argument->is($order);
         });
 
         // mail was sent to user
-        $mail = Mail::fake(OrderConfirmation::class);
-        $mail->assertSend(OrderConfirmation::class, function($mail) use ($order, $user){
+        $mail->assertSent(OrderConfirmation::class, function($mail) use ($user, $order){
             return $mail->order->is($order) && $mail->hasTo($user->email);
         });
-
     }
 
     /** @test */
@@ -117,6 +118,7 @@ class OrderControllerTest extends TestCase
     {
 //        $this->withoutExceptionHandling();
         $token = $this->faker->md5;
+        $email = $this->faker->safeEmail;
 
         $product = factory(Product::class)->create();
 
@@ -134,13 +136,13 @@ class OrderControllerTest extends TestCase
            ['error' => ['data' => 'passed to view']]
         );
         $paymentGateway->shouldReceive('charge')
-            ->with($token, \Mockery::type(Order::class))
+            ->with($token, $email, \Mockery::type(Order::class))
             ->andThrows($exception);
 
         $response = $this->post(route('order.store'), [
             'product_id' => $product->id,
             'stripeToken' => $token,
-            'stripeEmail' => $this->faker->safeEmail,
+            'stripeEmail' => $email,
         ]);
 
         $response->assertOk();

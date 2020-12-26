@@ -6,11 +6,13 @@ use App\Exceptions\PaymentGatewayChargeException;
 use App\Order;
 use App\Services\PaymentGateway;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PaymentGatewayTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function charge_colects_payment_with_stripe()
@@ -23,14 +25,16 @@ class PaymentGatewayTest extends TestCase
         $subject = new PaymentGateway();
         $token = $this->createTestToken();
         $order = factory(Order::class)->create();
+        $email = $this->faker->safeEmail;
 
-        $actual = $subject->charge($token, $order);
+        $actual = $subject->charge($token, $email, $order);
 
         $charge = $this->getStripeCharge($actual);
 
         $this->assertEquals($actual, $charge->id);
         $this->assertEquals($order->totalInCents(), $charge->amount);
         $this->assertEquals('usd', $charge->currency);
+        $this->assertEquals($email, $charge->receipt_email);
         $this->assertEquals('Confident Laravel - '. $order->product->name, $charge->description);
     }
 
@@ -39,10 +43,11 @@ class PaymentGatewayTest extends TestCase
     {
         $subject = new PaymentGateway();
         $order = factory(Order::class)->create();
+        $email = $this->faker->safeEmail;
 
         $this->expectException(PaymentGatewayChargeException::class);
 
-        $subject->charge('invalid-token', $order);
+        $subject->charge('invalid-token', $email, $order);
     }
 
     private function createTestToken()

@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Order extends Model
 {
-    protected $fillable = ['user_id', 'product_id', 'stripe_id', 'total'];
+    protected $fillable = ['user_id', 'product_id', 'transaction_id', 'total'];
 
-    protected $hidden = ['stripe_id'];
+    protected $hidden = ['transaction_id'];
 
     public function user()
     {

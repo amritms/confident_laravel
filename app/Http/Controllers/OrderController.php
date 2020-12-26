@@ -45,12 +45,12 @@ class OrderController extends Controller
 
         $this->applyCoupon($order);
 
-        $charge_id = $paymentGateway->charge($request->get('stripeToken'), $order);
+        $charge_id = $paymentGateway->charge($request->get('stripeToken'), $request->get('stripeEmail'), $order);
 
         $user = User::createFromPurchase($request->get('stripeEmail'), $charge_id);
 
         $order->user_id = $user->id;
-        $order->stripe_id = $charge_id;
+        $order->transaction_id = $charge_id;
         $order->save();
 
         event('order.placed', $order);

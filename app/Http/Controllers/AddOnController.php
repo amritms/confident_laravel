@@ -45,7 +45,7 @@ class AddOnController extends Controller
 
             $order = Order::firstOrNew(
                 ['user_id' => $request->user()->id],
-                ['stripe_id' => $charge->id, 'total' => $addon['total']]
+                ['transaction_id' => $charge->id, 'total' => $addon['total']]
             );
 
             $order->product_id = $addon['upgrade'];

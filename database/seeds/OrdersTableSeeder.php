@@ -15,7 +15,7 @@ class OrdersTableSeeder extends Seeder
         DB::table('orders')->insert([
             'user_id' => 1,
             'product_id' => \App\Product::FULL,
-            'stripe_id' => 'initialjmacaccount',
+            'transaction_id' => 'initialjmacaccount',
             'total' => 0
         ]);
     }

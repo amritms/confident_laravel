@@ -39,7 +39,7 @@ class CreateAccountTest extends TestCase
         $user = $users->first();
 
         $order = Order::where('product_id', $product->id)
-            ->where('stripe_id', $transaction_id)
+            ->where('transaction_id', $transaction_id)
             ->where('user_id', $user->id)
             ->where('total', $product->price)
             ->first();

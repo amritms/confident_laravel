@@ -42,7 +42,7 @@ class CreateAccount extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         $product = Product::findOrFail($this->input->getArgument('product_id'));
 
@@ -55,7 +55,7 @@ class CreateAccount extends Command
         $order = Order::create([
             'product_id' => $product->id,
             'total' => $product->price,
-            'stripe_id' => $this->input->getArgument('transaction_id'),
+            'transaction_id' => $this->input->getArgument('transaction_id'),
             'user_id' => $user->id
         ]);
 

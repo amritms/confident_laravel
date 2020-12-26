@@ -36,9 +36,7 @@ class CouponControllerTest extends TestCase
     /** @test */
     public function it_does_not_store_an_expired_code()
     {
-        $coupon = factory(Coupon::class)->create([
-            'expired_at' => now()
-        ]);
+        $coupon = factory(Coupon::class)->state('expired')->create();
 
         $response = $this->get('/promotions/' . $coupon->id);
 
