@@ -1,0 +1,20 @@
+# https://docs.docker.com/compose/compose-file/#/versioning
+version: '3'
+services:
+  php:
+    container_name: confident_laravel
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    environment:
+      PHP_MEMORY_LIMIT: '128M'
+      COMPOSER_MEMORY_LIMIT: '-1'
+#      DB_HOST: 'mysql'
+#      PHP_IDE_CONFIG: 'serverName=uk-restaurants.test'
+    volumes:
+      - ./:/var/www/vhost/:cached
+      - .docker/conf/xdebug-local.ini:/usr/local/etc/php/conf.d/xdebug.ini
+    ports:
+      - '9000:9000'
+#    networks:
+#      - docker_network
